@@ -22,10 +22,11 @@
     "domelementtype": "^2.2.0",
     "domhandler": "^4.3.0",
     "domutils": "^2.8.0",
-    "entities": "^2.2.0",
     "dotenv": "^16.0.0",
+    "entities": "^2.2.0",
     "event-target-shim": "^5.0.1",
     "follow-redirects": "^1.14.7",
+    "fuse.js": "^6.5.3",
     "htmlparser2": "^6.1.0",
     "minimist": "^1.2.5",
     "module-alias": "^2.2.2",
@@ -44,9 +45,8 @@
     "webidl-conversions": "^3.0.1",
     "whatwg-url": "^5.0.0"
   },
-  "devDependencies": {},
   "scripts": {
-    "bot": "node bot.js"
+    "bot": "node index.js"
   },
   "keywords": [],
   "author": "YOGESHWARAN R",
