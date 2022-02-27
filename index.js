@@ -70,7 +70,14 @@ bot.on('text', async (context) => {
                     })
                 })
 
+                await context.replyWithMarkdown(
+                    `🔍 Search your next Album`,
+                    Markup.inlineKeyboard([
+                        Markup.button.switchToCurrentChat('🔍 Search', ' ')
+                    ])
+                )
             })
+
     } else {
         context.reply('Only inline Search')
         context.replyWithMarkdown(
@@ -91,7 +98,7 @@ app.get('/', (_, res) => {
     res.send('Hello World')
 })
 
-app.listen(port, () => {})
+app.listen(port, () => { })
 
 
 // bot.launch()
