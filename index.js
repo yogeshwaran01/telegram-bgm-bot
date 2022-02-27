@@ -3,9 +3,19 @@ import { fetchSources, search } from "./lib/search.js";
 import { Markup, Telegraf } from 'telegraf'
 import * as messages from './lib/messages.js'
 import 'dotenv/config'
+import express from 'express'
 
-const bot = new Telegraf(process.env.BOT)
+const token = process.env.BOT
+const bot = new Telegraf(token)
 const sources = await fetchSources()
+const app = express()
+
+const port = process.env.PORT || 5000
+const url = "https://pure-bgm-bot.herokuapp.com"
+
+
+bot.telegram.setWebhook(`${url}/bot${token}`)
+app.use(bot.webhookCallback(`/bot${token}`))
 
 bot.on('inline_query', async (context) => {
     let query = context.inlineQuery.query
@@ -77,7 +87,14 @@ bot.catch(err => {
     bot.telegram.sendMessage(1047531822, "err")
 })
 
-bot.launch()
+app.get('/', (_, res) => {
+    res.send('Hello World')
+})
 
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+app.listen(port, () => {})
+
+
+// bot.launch()
+
+// process.once('SIGINT', () => bot.stop('SIGINT'))
+// process.once('SIGTERM', () => bot.stop('SIGTERM'))
