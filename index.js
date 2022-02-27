@@ -1,18 +1,20 @@
 import fetchAlbum from "./lib/album.js";
-import { search, sources } from "./lib/search.js";
+import { fetchSources, search } from "./lib/search.js";
 import { Markup, Telegraf } from 'telegraf'
+import * as messages from './lib/messages.js'
 import 'dotenv/config'
 
 const bot = new Telegraf(process.env.BOT)
-
+const sources = await fetchSources()
 
 bot.on('inline_query', async (context) => {
     let query = context.inlineQuery.query
-    let results = search(query).splice(0, 10).map((result, index) => {
+    let res = await search(query, sources)
+    let results = res.splice(0, 10).map((result, index) => {
         return {
             'type': 'article',
             'title': result.item.parsedURL,
-            'id': index,
+            'id': index.toString() + "-id",
             'message_text': "* " + result.item.parsedURL
         }
     })
@@ -21,12 +23,7 @@ bot.on('inline_query', async (context) => {
 })
 
 bot.start(context => {
-    context.replyWithMarkdown(
-        `🔍 Search 💿 BGMS and ⬇️ Download
-
-*** Here you can search bgms in Inline mode ***
-
-Source of Music: [bgmringtones](https://www.bgmringtones.com/)`,
+    context.replyWithMarkdown(messages.welcomeMessage,
         Markup.inlineKeyboard([
             Markup.button.switchToCurrentChat('🔍 Search', ' '),
             Markup.button.callback('🧑‍💻 Developer', 'dev'),
@@ -36,17 +33,11 @@ Source of Music: [bgmringtones](https://www.bgmringtones.com/)`,
 })
 
 bot.action('dev', (context) => {
-    context.replyWithMarkdown(
-        `Bot developed by [yogeshwaran01](https://yogeshwaran01.github.io)`
-    )
+    return context.replyWithMarkdown(messages.aboutDeveloperMessage)
 })
 
 bot.action('info', (context) => {
-    context.replyWithMarkdown(
-        `***Source*** : [bgmringtones](https://www.bgmringtones.com)
-***Language*** : Javascript
-***SourceCode*** : [Github Repo](https://github.com/yogeshwaran01/telegram-bgm-bot)`
-    )
+    return context.replyWithMarkdown(messages.infoMessage)
 })
 
 bot.on('text', async (context) => {
@@ -73,10 +64,7 @@ bot.on('text', async (context) => {
     } else {
         context.reply('Only inline Search')
         context.replyWithMarkdown(
-            `🔍 Search 💿 BGMS and ⬇️ Download
-    
-*** Here you can search bgms in Inline mode ***
-`,
+            `🔍 Search`,
             Markup.inlineKeyboard([
                 Markup.button.switchToCurrentChat('🔍 Search', ' ')
             ])
@@ -84,7 +72,10 @@ bot.on('text', async (context) => {
     }
 })
 
-
+bot.catch(err => {
+    console.log(err)
+    bot.telegram.sendMessage(1047531822, "err")
+})
 
 bot.launch()
 
