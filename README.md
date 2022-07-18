@@ -1,6 +1,6 @@
 # [telegram-bgm-bot](https://t.me/pure_bgm_bot)
 
-Scrape all the bgm music from this [site](https://bgmringtones.com), and provide a inline mode to search and download various bgm music and ringtones.
+Scrape all the bgm from this [site](https://bgmringtones.com), and provide a inline mode to search and download various bgm music and ringtones.
 
 ## Bot
 
