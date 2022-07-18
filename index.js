@@ -60,10 +60,15 @@ bot.on('text', async (context) => {
         let target = des.url
         fetchAlbum(target)
             .then(async (data) => {
-                await context.replyWithPhoto(data.poster, {
-                    'caption': data.title
-                })
-
+                try {
+                    await context.replyWithPhoto(data.poster, {
+                        'caption': data.title
+                    })
+                } 
+                catch (error) { 
+                    console.log(error)
+                }
+                
                 data.bgms.forEach(async (bgm) => {
                     await context.replyWithAudio(bgm.bgmSource, {
                         'caption': bgm.bgmName
